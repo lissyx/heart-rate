@@ -1,0 +1,19 @@
+This application will allow you to check your heart rate.
+
+It works by analyzing video feed of your finger placed over the camera
+objective, with flash enabled. We can then detect slight red channel
+color changes that occurs when heart beats.  With simple derivative
+computation and some heuristic to avoid false positive, we can then
+count beats and thus heart rate.
+
+Please note this has only been tested on FirefoxOS running on Nexus S,
+and while it gives good results, it is not expected to be medically
+accurate.
+
+Also, to make it work, it relied on several bugs:
+ - https://bugzilla.mozilla.org/show_bug.cgi?id=787812, to add Nexus S
+   pixel format to allow copying frames from video to canvas
+ - https://bugzilla.mozilla.org/show_bug.cgi?id=832745, to be able to
+   copy frames from video camera feed to canvas
+ - https://bugzilla.mozilla.org/show_bug.cgi?id=825325, to get
+   mozPaintedFrames values
