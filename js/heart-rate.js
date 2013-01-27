@@ -10,6 +10,7 @@ var HeartRate = {
   _currsecs: 0.0,
   _maxRed: 0.0,
   _inc: 1.0,
+  _redOffset: 0,
   _imageData: undefined,
   _prevValue: undefined,
   _prevDeriv: undefined,
@@ -29,6 +30,18 @@ var HeartRate = {
 
   init: function heartrate_init() {
     var self = this;
+    var settings = window.navigator.mozSettings;
+    if (settings) {
+      var key = "deviceinfo.hardware";
+      var getPlatform = settings.createLock().get(key);
+      getPlatform.addEventListener('success', function onsuccess() {
+        var platform = getPlatform.result[key];
+        /* Nexus S has a bug, inverting red and blue channel */
+        if (platform == "herring") {
+          this._redOffset = 2;
+        }
+      });
+    }
     var video = this.viewfinder;
     this.canvas = document.getElementById('image');
     this.ctx1 = this.canvas.getContext('2d');
@@ -71,12 +84,11 @@ var HeartRate = {
   },
 
   computeFrame: function heartrate_computeFrame() {
-    var redOffset = 2; // buggy nexus s, should be 0
     var totalRed = 0.0;
     for (var x = 0; x < this._imageData.width; x += this._inc) {
       for (var y = 0; y < this._imageData.height; y += this._inc) {
         var offset = (y * this._imageData.width + x) * 4;
-        totalRed += this._imageData.data[offset + redOffset];
+        totalRed += this._imageData.data[offset + this._redOffset];
       }
     }
 

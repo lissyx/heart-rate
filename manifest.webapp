@@ -8,7 +8,8 @@
     "url": "https://github.com/lissyx/gaia/tree/heart-rate"
   },
   "permissions": {
-    "camera":{}
+    "camera":{},
+    "settings":{"access": "readonly"}
   },
   "icons": {
     "128": "/images/heart-rate.png"
